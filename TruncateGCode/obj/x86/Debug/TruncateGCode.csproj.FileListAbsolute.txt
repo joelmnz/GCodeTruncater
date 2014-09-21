@@ -1,0 +1,9 @@
+H:\Projects\TruncateGCode\TruncateGCode\bin\Debug\TruncateGCode.exe.config
+H:\Projects\TruncateGCode\TruncateGCode\obj\x86\Debug\TruncateGCode.csprojResolveAssemblyReference.cache
+H:\Projects\TruncateGCode\TruncateGCode\obj\x86\Debug\TruncateGCode.Form1.resources
+H:\Projects\TruncateGCode\TruncateGCode\obj\x86\Debug\TruncateGCode.Properties.Resources.resources
+H:\Projects\TruncateGCode\TruncateGCode\obj\x86\Debug\TruncateGCode.csproj.GenerateResource.Cache
+H:\Projects\TruncateGCode\TruncateGCode\bin\Debug\TruncateGCode.exe
+H:\Projects\TruncateGCode\TruncateGCode\bin\Debug\TruncateGCode.pdb
+H:\Projects\TruncateGCode\TruncateGCode\obj\x86\Debug\TruncateGCode.exe
+H:\Projects\TruncateGCode\TruncateGCode\obj\x86\Debug\TruncateGCode.pdb
