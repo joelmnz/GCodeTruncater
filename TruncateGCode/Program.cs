@@ -10,11 +10,20 @@ namespace TruncateGCode
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
+        static void Main(string[] args)
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+
+            Form1 mainForm = new Form1();
+            mainForm.Show();
+            if (args.Length>0)
+            {
+                // allow file input, assume first arg is file name
+                mainForm.ProcessCodeFile(args[0]);
+            }
+
+            Application.Run(mainForm);
         }
     }
 }

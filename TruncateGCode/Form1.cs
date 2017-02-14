@@ -6,98 +6,16 @@ namespace TruncateGCode
 {
     public partial class Form1 : Form
     {
-        private bool end = false;
         public Form1()
         {
             InitializeComponent();
-        }
-
-        public string truncateGCode(string code)
-        {
-            try
-            {
-
-                if ((code.Substring(0, 1) == "(") || (code.Substring(0, 1) == ";") || (code.Substring(0, 1) == ":") ||
-                    (code.Substring(0, 1) == "'"))
-                {
-                    return code;
-                }
-
-                string[] codes = code.Split(' ');
-                string finCode = "";
-
-                foreach (string gCode in codes)
-                {
-                    if (gCode.IndexOf(".") > -1)
-                    {
-                        double val = 0;
-                        if (double.TryParse(gCode.Substring(0, 1), out val))
-                        {
-                        }
-                        else
-                        {
-                            if (Convert.ToDouble(gCode.Substring(1, gCode.Length - 1)) != 0)
-                            {
-                                string num = Convert.ToDouble(gCode.Substring(1, gCode.Length - 1)).ToString("#.###");
-                                if (num == "")
-                                {
-                                    num = "0";
-                                }
-                                finCode += gCode.Substring(0, 1) + num;
-
-                            }
-                            else
-                            {
-                                finCode += gCode.Substring(0, 1) + "0";
-                            }
-                        }
-                    }
-                    else
-                    {
-                        finCode += gCode;
-                    }
-                }
-
-                return finCode;
-            }
-            catch (Exception ex)
-            {
-               
-                    MessageBox.Show(ex.Message, "Unable to Process GCode",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
-                 
-                end = true;
-                return "(ERROR)";
-            }
-
         }
 
         private void btnOpenFile_Click(object sender, EventArgs e)
         {
             if (openFile.ShowDialog() != DialogResult.Cancel)
             {
-                tbSource.Text = "";
-                tbTruncate.Text = "";
-                tbSource.Text = File.ReadAllText(openFile.FileName);
-                ProcessCode();
-                lblSts.Text = "";
-            }
-        }
-
-
-
-        void ProcessCode()
-        {
-            string[] lines = tbSource.Text.Split('\n');
-            foreach (string line in lines)
-            {
-                line.Replace("\r","");
-                tbTruncate.Text += truncateGCode(line) + Environment.NewLine;
-                if (end)
-                {
-                    end = false;
-                    break;
-                }
+                ProcessCodeFile(openFile.FileName);
             }
         }
 
@@ -112,9 +30,66 @@ namespace TruncateGCode
 
         private void btnTruncate_Click(object sender, EventArgs e)
         {
-            tbTruncate.Text = "";
-            lblSts.Text = "";
             ProcessCode();
         }
-    }
-}
+
+        private int DecimalPlaces { get { return Convert.ToInt32(nudDecimalPlaces.Value); } set { nudDecimalPlaces.Value = value; } }
+
+        public void ProcessCodeFile(string fileToLoad)
+        {
+            tbSource.Text = string.Empty;
+            try
+            {
+                tbSource.Text = File.ReadAllText(fileToLoad);
+            }
+            catch (Exception ex)
+            {
+                ShowError(ex);
+                return;
+            }
+            ProcessCode();
+        }
+
+        private void ProcessCode()
+        {
+            tbTruncate.Text = string.Empty;
+            lblSts.Text = string.Empty;
+
+            try
+            {
+                tbTruncate.Text = GCodeTruncateUtil.ProcessCode(tbSource.Text, DecimalPlaces);
+            }
+            catch (Exception ex)
+            {
+                ShowError(ex);
+            }
+        }
+
+        private void ShowError(Exception ex)
+        {
+            MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
+        private void tbSource_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop)) e.Effect = DragDropEffects.All;
+        }
+
+        private void tbSource_DragDrop(object sender, DragEventArgs e)
+        {
+            try
+            {
+                tbTruncate.Text = String.Empty;
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                if (files == null || files.Length == 0) { return; }
+                //foreach (string file in files) Console.WriteLine(file);
+                tbSource.Text = System.IO.File.ReadAllText(files[0]);
+                ProcessCode();
+            }
+            catch (Exception ex)
+            {
+                ShowError(ex);
+            }
+        }
+    } // Form1
+} // ns
