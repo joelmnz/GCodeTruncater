@@ -9,7 +9,28 @@ namespace TruncateGCode
         public Form1()
         {
             InitializeComponent();
+            LoadConfig();
         }
+
+        private void LoadConfig()
+        {
+            try
+            {
+                string apptitle = System.Configuration.ConfigurationManager.AppSettings["AppTitle"];
+                if (!string.IsNullOrEmpty(apptitle)) { this.Text = apptitle; }
+
+                this.Text = this.Text + " v"  + Program.VersionText();
+
+                OptimizedByCommentLine = System.Configuration.ConfigurationManager.AppSettings["OptimizedByComment"];
+            }
+            catch (Exception ex)
+            {
+                ShowError(ex);
+            }
+        }
+
+        private string OptimizedByCommentLine { get; set; }
+
 
         private void btnOpenFile_Click(object sender, EventArgs e)
         {
@@ -57,7 +78,7 @@ namespace TruncateGCode
 
             try
             {
-                tbTruncate.Text = GCodeTruncateUtil.ProcessCode(tbSource.Text, DecimalPlaces);
+                tbTruncate.Text = GCodeTruncateUtil.ProcessCode(tbSource.Text, DecimalPlaces, OptimizedByCommentLine);
             }
             catch (Exception ex)
             {
@@ -83,8 +104,7 @@ namespace TruncateGCode
                 string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
                 if (files == null || files.Length == 0) { return; }
                 //foreach (string file in files) Console.WriteLine(file);
-                tbSource.Text = System.IO.File.ReadAllText(files[0]);
-                ProcessCode();
+                ProcessCodeFile(files[0]);
             }
             catch (Exception ex)
             {

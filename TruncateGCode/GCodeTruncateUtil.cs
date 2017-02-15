@@ -1,17 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace TruncateGCode
 {
-    class GCodeTruncateUtil
+    public class GCodeTruncateUtil
     {
-
         public static string ProcessCode(string code, int decimalPlaces)
+        {
+            return ProcessCode(code, decimalPlaces, string.Empty);
+        }
+
+        public static string ProcessCode(string code, int decimalPlaces, string addComment)
         {
             if (string.IsNullOrEmpty(code)) return code;
 
             string[] lines = code.Split('\n');
+            if (!string.IsNullOrEmpty(addComment))
+            {
+                lines = InsertCommentLine(lines, addComment, 2);
+            }
+
             System.Text.StringBuilder sb = new System.Text.StringBuilder();
 
             //foreach (string line in lines)
@@ -30,6 +38,14 @@ namespace TruncateGCode
             }
 
             return sb.ToString();
+        }
+
+        public static string[] InsertCommentLine(string[] lines, string comment, int lineNumber)
+        {
+            // for now dont error check, just insert line
+            List<string> newLines = new List<string>(lines);
+            newLines.Insert(lineNumber - 1, "(" + comment + ")");
+            return newLines.ToArray();
         }
 
         public static string TruncateGCode(string code, int decimalPlaces)
@@ -85,11 +101,12 @@ namespace TruncateGCode
             return finCode;
         }
 
-        static string AppendToEndOfString(string currentValue, string addValue, int i, int len)
+        private static string AppendToEndOfString(string currentValue, string addValue, int i, int len)
         {
             return AppendToEndOfString(currentValue, addValue, (i == len - 1));
         }
-        static string AppendToEndOfString(string currentValue, string addValue, bool isLastItem)
+
+        private static string AppendToEndOfString(string currentValue, string addValue, bool isLastItem)
         {
             if (isLastItem == true)
             {
@@ -100,7 +117,5 @@ namespace TruncateGCode
                 return currentValue + addValue + ' ';
             }
         }
-
-
     }
 }

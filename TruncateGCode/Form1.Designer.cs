@@ -28,9 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.tbSource = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.nudDecimalPlaces = new System.Windows.Forms.NumericUpDown();
+            this.label1 = new System.Windows.Forms.Label();
             this.btnTruncate = new System.Windows.Forms.Button();
             this.btnOpenFile = new System.Windows.Forms.Button();
             this.tbTruncate = new System.Windows.Forms.TextBox();
@@ -39,14 +42,13 @@
             this.btnSaveFile = new System.Windows.Forms.Button();
             this.openFile = new System.Windows.Forms.OpenFileDialog();
             this.saveFile = new System.Windows.Forms.SaveFileDialog();
-            this.label1 = new System.Windows.Forms.Label();
-            this.nudDecimalPlaces = new System.Windows.Forms.NumericUpDown();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             this.groupBox1.SuspendLayout();
-            this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudDecimalPlaces)).BeginInit();
+            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -78,6 +80,8 @@
             this.tbSource.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.tbSource.Size = new System.Drawing.Size(567, 550);
             this.tbSource.TabIndex = 1;
+            this.tbSource.DragDrop += new System.Windows.Forms.DragEventHandler(this.tbSource_DragDrop);
+            this.tbSource.DragEnter += new System.Windows.Forms.DragEventHandler(this.tbSource_DragEnter);
             // 
             // groupBox1
             // 
@@ -92,12 +96,38 @@
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             // 
+            // nudDecimalPlaces
+            // 
+            this.nudDecimalPlaces.Location = new System.Drawing.Point(377, 15);
+            this.nudDecimalPlaces.Maximum = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            this.nudDecimalPlaces.Name = "nudDecimalPlaces";
+            this.nudDecimalPlaces.Size = new System.Drawing.Size(50, 20);
+            this.nudDecimalPlaces.TabIndex = 3;
+            this.nudDecimalPlaces.Value = new decimal(new int[] {
+            3,
+            0,
+            0,
+            0});
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(281, 17);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(90, 13);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "# Decimal Places";
+            // 
             // btnTruncate
             // 
             this.btnTruncate.Location = new System.Drawing.Point(445, 12);
             this.btnTruncate.Name = "btnTruncate";
             this.btnTruncate.Size = new System.Drawing.Size(116, 23);
-            this.btnTruncate.TabIndex = 2;
+            this.btnTruncate.TabIndex = 1;
             this.btnTruncate.Text = "&Truncate GCode";
             this.btnTruncate.UseVisualStyleBackColor = true;
             this.btnTruncate.Click += new System.EventHandler(this.btnTruncate_Click);
@@ -107,7 +137,7 @@
             this.btnOpenFile.Location = new System.Drawing.Point(6, 12);
             this.btnOpenFile.Name = "btnOpenFile";
             this.btnOpenFile.Size = new System.Drawing.Size(75, 23);
-            this.btnOpenFile.TabIndex = 1;
+            this.btnOpenFile.TabIndex = 0;
             this.btnOpenFile.Text = "&Open File";
             this.btnOpenFile.UseVisualStyleBackColor = true;
             this.btnOpenFile.Click += new System.EventHandler(this.btnOpenFile_Click);
@@ -120,7 +150,7 @@
             this.tbTruncate.Name = "tbTruncate";
             this.tbTruncate.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.tbTruncate.Size = new System.Drawing.Size(555, 550);
-            this.tbTruncate.TabIndex = 2;
+            this.tbTruncate.TabIndex = 1;
             // 
             // groupBox2
             // 
@@ -130,7 +160,7 @@
             this.groupBox2.Location = new System.Drawing.Point(0, 0);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(555, 45);
-            this.groupBox2.TabIndex = 1;
+            this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
             // 
             // lblSts
@@ -139,14 +169,14 @@
             this.lblSts.Location = new System.Drawing.Point(88, 21);
             this.lblSts.Name = "lblSts";
             this.lblSts.Size = new System.Drawing.Size(0, 13);
-            this.lblSts.TabIndex = 2;
+            this.lblSts.TabIndex = 1;
             // 
             // btnSaveFile
             // 
             this.btnSaveFile.Location = new System.Drawing.Point(7, 11);
             this.btnSaveFile.Name = "btnSaveFile";
             this.btnSaveFile.Size = new System.Drawing.Size(75, 23);
-            this.btnSaveFile.TabIndex = 1;
+            this.btnSaveFile.TabIndex = 0;
             this.btnSaveFile.Text = "&Save File";
             this.btnSaveFile.UseVisualStyleBackColor = true;
             this.btnSaveFile.Click += new System.EventHandler(this.btnSaveFile_Click);
@@ -163,38 +193,13 @@
             this.saveFile.InitialDirectory = "c:\\";
             this.saveFile.Title = "Save File";
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(281, 17);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(90, 13);
-            this.label1.TabIndex = 3;
-            this.label1.Text = "# Decimal Places";
-            // 
-            // nudDecimalPlaces
-            // 
-            this.nudDecimalPlaces.Location = new System.Drawing.Point(377, 15);
-            this.nudDecimalPlaces.Maximum = new decimal(new int[] {
-            5,
-            0,
-            0,
-            0});
-            this.nudDecimalPlaces.Name = "nudDecimalPlaces";
-            this.nudDecimalPlaces.Size = new System.Drawing.Size(50, 20);
-            this.nudDecimalPlaces.TabIndex = 4;
-            this.nudDecimalPlaces.Value = new decimal(new int[] {
-            3,
-            0,
-            0,
-            0});
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1126, 595);
             this.Controls.Add(this.splitContainer1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Truncate GCode";
@@ -202,12 +207,13 @@
             this.splitContainer1.Panel1.PerformLayout();
             this.splitContainer1.Panel2.ResumeLayout(false);
             this.splitContainer1.Panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudDecimalPlaces)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudDecimalPlaces)).EndInit();
             this.ResumeLayout(false);
 
         }
